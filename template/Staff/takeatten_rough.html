@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+{% extends 'base.html' %}
+{% block content %}
+
+            <div class="content container-fluid">
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Take Attendance</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="subjects.html">Attendance</a></li>
+                                <li class="breadcrumb-item active">Take Attendance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 {% include 'includes/messages.html' %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                {% if action is None %}
+                                <form action="?action=get_student" method="post">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h5 class="form-title"><span>Take Attendance</span></h5>
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <label>Subject</label>
+                                        <select class="form-control" name="subject_id" required>
+                                          <option>Select Subject</option>
+                                            {% for i in subject %}
+                                          <option value="{{i.id}}">{{i.name}}</option>
+                                          {% endfor %}
+                                        </select>
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <label>Session Year</label>
+                                        <select class="form-control" name="session_year_id">
+                                          <option>Select Session Year</option>
+                                            {% for i in session_year %}
+                                          <option value="{{i.id}}">{{i.session_start}} To {{i.session_end}}</option>
+                                          {% endfor %}
+                                        </select>
+                                        </div>
+                                        <div class="col-12 mt-4">
+                                            <button type="submit" class="btn btn-primary">Fetch Student</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% else %}
+                                <form action="{% url 'staff_save_attendance' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h5 class="form-title"><span>Subject Information</span></h5>
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <label>Subject</label>
+                                            <select class="form-control" name="subject_id" required>
+                                                <option value="{{get_subject.id}}">{{get_subject}}</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6">
+                                            <label>Session Year</label>
+                                            <select class="form-control" name="session_year_id">
+                                                <option value="{{get_session_year.id}}">{{get_session_year}}</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 mt-4">
+                                            <div class="form-group">
+                                                <label>Attendance Date</label>
+                                                <input type="date" class="form-control" name="attendance_date" required>
+                                            </div>
+                                        </div>
+<!--                                        { for i in students %}-->
+<!--                                        <div class="col-12 mt-4 mt-2">-->
+
+
+
+
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="card card-table">
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table id="table_id" class="table table-hover table-center mb-0">  <thead>
+                                                            <tr>
+                                                               <th>ID</th>
+                                                               <th>Staff Name</th>
+                                                               <th>Status</th>
+
+                                                               <th class="text-right">Action</th>
+                                                            </tr>
+                                                         </thead>
+                                                                <tbody>
+                                                                {% for i in students %}
+                                                                <tr>
+                                                                    <td>{{ i.id }}</td>
+                                                                    <td>{{ i.admin.first_name }} {{ i.admin.last_name }}</td>
+                                                                    <td>{{i.data}}</td>
+                                                                    <div class="form-group form-check">
+                                                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" value="{{i.id}}" name="student_id">
+                                                                        <label class="form-check-label" for="exampleCheck1">{{i.admin.first_name}} {{i.admin.last_name}}</label>
+                                                                    </div>
+<!--                                                                    <td class="text-right">-->
+<!--                                                                        <div class="actions">-->
+<!--                                                                            {% if i.status == 0 %}-->
+<!--                                                                            <a href="{% url 'attendance_present' i.id %}" class="btn btn-success">Present</a>-->
+<!--                                                                            <a href="{% url 'attendance_absent' i.id %}" class="btn btn-danger">Absent</a>-->
+<!--                                                                            {% elif i.status == 1 %}-->
+<!--                                                                            <button class="btn btn-success"  disabled="disabled">Present</button>-->
+<!--                                                                            {% else %}-->
+<!--                                                                            <button class="btn btn-danger"  disabled="disabled">Absent</button>-->
+<!--                                                                            {% endif %}-->
+<!--                                                                        </div>-->
+<!--                                                                    </td>-->
+                                                                </tr>
+                                                                {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+<!--                                            <div class="form-group form-check">-->
+<!--                                                <input type="checkbox" class="form-check-input" id="exampleCheck1" value="{{i.id}}" name="student_id">-->
+<!--                                                <label class="form-check-label" for="exampleCheck1">{{i.admin.first_name}} {{i.admin.last_name}}</label>-->
+<!--                                            </div>-->
+                                        </div>
+<!--                                        { endfor %}-->
+
+
+                                        <div class="col-12 mt-4">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+{% endblock %}
+
+
